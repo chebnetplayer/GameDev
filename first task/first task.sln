@@ -1,7 +1,7 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2008
-
-Project("{E2AD0D05-5F3D-33BD-D77A-5B73F2C0B1FA}") = "first task", "Assembly-CSharp.csproj", "{710F81F1-2CD6-2B19-7F00-428AB5863940}"
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "first task", "Assembly-CSharp.csproj", "{710F81F1-2CD6-2B19-7F00-428AB5863940}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
