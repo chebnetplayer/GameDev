@@ -1,40 +1,42 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.EventSystems;
+﻿using UnityEngine;
 
 public class CameraZoom : MonoBehaviour
 {
-    const string ToNormal= "ToNormal";
-    const string IsScrollingIn = "IsScrollingIn";
-    const string IsScrollingOut = "IsScrollingOut";
-    const string MouseScroll = "Mouse ScrollWheel";
-
-    void Start() {
-    }
-
-    void Update()
-    {        
-        if ((Input.GetAxis(MouseScroll) > 0))
-            ChangeParametersValue(IsScrollingIn, IsScrollingOut, ToNormal);
-        if ((Input.GetAxis(MouseScroll) < 0))
-            ChangeParametersValue(IsScrollingOut, IsScrollingIn, ToNormal);
-        if ((Input.GetAxis(MouseScroll) < 0) &&
-            GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("NormalIn"))
-        {
-            ChangeParametersValue(ToNormal, IsScrollingIn, IsScrollingOut);
-        }
-        if ((Input.GetAxis(MouseScroll) > 0) &&
-           GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("NormalOut"))
-        {
-            ChangeParametersValue(ToNormal,IsScrollingIn, IsScrollingOut);
-        }
-    }
-    void ChangeParametersValue(string trueparameter,string falseparameter1,string falseparameter2)
+    private Animator _animator;
+    void Start()
     {
-        GetComponent<Animator>().SetBool(trueparameter, true);
-        GetComponent<Animator>().SetBool(falseparameter1, false);
-        GetComponent<Animator>().SetBool(falseparameter2, false);
+        _animator = GetComponent<Animator>();
     }
+    void Update()
+    {
+        if (Input.GetAxis("Mouse ScrollWheel") < 0)
+        {
+            _animator.SetTrigger("ZoomOut");
+            if (_animator.GetCurrentAnimatorStateInfo(0).IsName("NormalIn"))            
+                ReturnToNormalAfterRetraction();               
+            if (_animator.GetCurrentAnimatorStateInfo(0).IsName("NormalOut"))
+                _animator.ResetTrigger("Zoomout");
+        }
+        if (Input.GetAxis("Mouse ScrollWheel") > 0)
+        {
+            _animator.SetTrigger("ZoomIn");
+            if (_animator.GetCurrentAnimatorStateInfo(0).IsName("NormalOut"))          
+                ReturnToNormalAfterApproach();           
+            if (_animator.GetCurrentAnimatorStateInfo(0).IsName("NormalIn"))
+                _animator.ResetTrigger("ZoomIn");
+        }
+    }
+
+    private void ReturnToNormalAfterApproach()
+    {
+        _animator.SetTrigger("ToNormal");
+        _animator.ResetTrigger("ZoomIn");
+    }
+
+    private void ReturnToNormalAfterRetraction()
+    {
+        _animator.SetTrigger("ToNormal");
+        _animator.ResetTrigger("ZoomOut");
+    }
+
 }
